@@ -7,10 +7,16 @@ public class Player : MonoBehaviour {
 	public Vector2 maxVelocity = new Vector2(3,5);
 	public bool standing;
 	public float jetSpeed = 15f;
+	public float airSpeedMultiplier = 0.3f;
+
+	private Animator animator;
+	private PlayerController controller;	
 
 	// Use this for initialization
 	void Start () {
-	
+		controller = GetComponent<PlayerController>();
+		animator = GetComponent<Animator>();
+
 	}
 	
 	// Update is called once per frame
@@ -29,25 +35,28 @@ public class Player : MonoBehaviour {
 			standing = false;
 		}
 
-		if (Input.GetKey("right")) { 
-			if (absVelX < maxVelocity.x) { 
-				forceX = speed;
-				transform.localScale = new Vector3(1,1,1);
+		// check if moving
+		if (controller.moving.x !=0) {
+			
+			if (absVelX < maxVelocity.x) {
+				forceX = standing ? speed * controller.moving.x : (speed * controller.moving.x * airSpeedMultiplier);
+				transform.localScale = new Vector3(forceX > 0 ? 1 : -1, 1, 1);
 			}
-		}
-		else if (Input.GetKey("left")) { 
-			if (absVelX < maxVelocity.x) { 
-				forceX = - speed;
-				transform.localScale = new Vector3(-1,1,1);
-			}
+			animator.SetInteger("AnimState",1);
+
+		} else { 
+			animator.SetInteger("AnimState",0);
 		}
 
-		if (Input.GetKey("up")) { 
+		if (controller.moving.y > 0) {
 			if (absVelY < maxVelocity.y) {
-				forceY = jetSpeed;
+				forceY = jetSpeed * controller.moving.y;
 			}
+			animator.SetInteger("AnimState",2);
 		}
-
+		else if (absVelY > 0 ) { 
+			animator.SetInteger("AnimState",3);
+		}
 
 		GetComponent<Rigidbody2D>().AddForce(new Vector2(forceX,forceY));
 	}
