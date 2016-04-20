@@ -29,6 +29,7 @@ public class Door : MonoBehaviour {
 
 	void OnOpenEnd() { 
 		state = OPEN;
+
 	}
 
 	void OnCloseStart() { 
@@ -55,6 +56,9 @@ public class Door : MonoBehaviour {
 		// want door to have a delay before closing 
 
 		StartCoroutine(CloseNow());
+
+		
+
 	}
 
 	private IEnumerator CloseNow() {

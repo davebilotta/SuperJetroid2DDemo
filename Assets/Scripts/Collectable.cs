@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Collectable : MonoBehaviour {
 
+	public AudioClip pickupSound;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -17,6 +19,9 @@ public class Collectable : MonoBehaviour {
 		// target = target of object that set off trigger
 	
 		if (target.gameObject.tag == "Player") {
+			if (pickupSound) {
+				AudioSource.PlayClipAtPoint(pickupSound,transform.position);
+			}
 			Destroy(gameObject);
 		}
 	}
