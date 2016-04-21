@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Explode : MonoBehaviour {
 
@@ -34,6 +35,7 @@ public class Explode : MonoBehaviour {
 
 		var t = transform;
 
+		// throw body parts everywhere
 		for (int i = 0; i < totalParts; i++) {
 			// move body part outside of player's area 
 			t.TransformPoint(0, -100, 0);
@@ -51,5 +53,12 @@ public class Explode : MonoBehaviour {
 			clone.GetComponent<Rigidbody2D>().AddForce(Vector3.up * Random.Range(100,400));
 
 		}
+
+		GameObject go = new GameObject("ClickToContinue");
+		ClickToContinue script = go.AddComponent<ClickToContinue>();
+		// formerly Application.loadedLevelName; 
+		script.scene = SceneManager.GetActiveScene().name;
+		go.AddComponent<DisplayRestartText>();
+
 	}
 }
